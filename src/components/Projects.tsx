@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { ExternalLink, Github, Smartphone, Globe } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -125,6 +126,24 @@ export const Projects = () => {
     type: p.technologies && p.technologies.toLowerCase().includes("react native") ? "mobile" : "web",
   }));
 
+  // Show-more state: show only first two rows initially (responsive)
+  const [showAll, setShowAll] = useState(false);
+  const [initialCount, setInitialCount] = useState(6);
+
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setInitialCount(6); // lg: 3 cols * 2 rows
+      else if (w >= 768) setInitialCount(4); // md: 2 cols * 2 rows
+      else setInitialCount(2); // sm: 1 col * 2 rows
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
+  const visibleProjects = showAll ? projects : projects.slice(0, initialCount);
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -182,12 +201,11 @@ export const Projects = () => {
           <motion.div
             variants={container}
             initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
+            animate="show"
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {projects.map((project, index) => (
-              <motion.div key={index} variants={item}>
+            {visibleProjects.map((project) => (
+              <motion.div key={project.title} variants={item}>
                 <Card className="overflow-hidden glass-effect border-border hover:border-primary/50 transition-all duration-300 group h-full flex flex-col">
                   {/* Project Header - use real image as background */}
                   <div className="relative h-48 overflow-hidden">
@@ -300,14 +318,25 @@ export const Projects = () => {
             ))}
           </motion.div>
 
-          {/* View More */}
+          {/* View More / Show Less + GitHub Link */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-center mt-12"
+            className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
           >
+            <div className="flex items-center gap-3">
+              <Button
+                size="lg"
+                className="font-semibold"
+                onClick={() => setShowAll((s) => !s)}
+              >
+                {showAll ? "Show Less" : "Show More"}
+              </Button>
+              <div className="text-sm text-muted-foreground">Showing {Math.min(showAll ? projects.length : initialCount, projects.length)} of {projects.length}</div>
+            </div>
+
             <Button
               size="lg"
               variant="outline"
@@ -331,3 +360,44 @@ export const Projects = () => {
     </section>
   );
 };
+
+function ShowMoreControls({ projects }: { projects: any[] }) {
+  const [showAll, setShowAll] = useState(false);
+  const [initialCount, setInitialCount] = useState(6);
+
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) setInitialCount(6); // lg: 3 cols * 2 rows
+      else if (w >= 768) setInitialCount(4); // md: 2 cols * 2 rows
+      else setInitialCount(2); // sm: 1 col * 2 rows
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+
+  const visible = showAll ? projects.length : initialCount;
+
+  // Render the toggle button which will control visible items via a custom event
+  // We'll communicate visibility by updating a data attribute on the grid container so CSS/JS can respond.
+  // Simpler: dispatch a custom event with visible count
+  useEffect(() => {
+    const evt = new CustomEvent("projects:visible", { detail: { visible } });
+    window.dispatchEvent(evt);
+  }, [visible]);
+
+  return (
+    <div className="flex items-center gap-3">
+      <Button
+        size="lg"
+        className="font-semibold"
+        onClick={() => setShowAll((s) => !s)}
+      >
+        {showAll ? "Show Less" : "Show More"}
+      </Button>
+      <div className="text-sm text-muted-foreground">Showing {Math.min(visible, projects.length)} of {projects.length}</div>
+    </div>
+  );
+}
+

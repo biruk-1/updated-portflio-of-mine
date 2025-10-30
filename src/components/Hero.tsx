@@ -149,8 +149,8 @@ export const Hero = () => {
                 className="flex items-center gap-6 pt-4"
               >
                 {[
-                  { icon: Github, href: "https://github.com/birukchali", label: "GitHub" },
-                  { icon: Linkedin, href: "https://linkedin.com/in/birukchali", label: "LinkedIn" },
+                  { icon: Github, href: "https://github.com/biruk-1", label: "GitHub" },
+                  { icon: Linkedin, href: "https://www.linkedin.com/in/biruk-tessema-105521231/", label: "LinkedIn" },
                   { icon: Mail, href: "mailto:birukchali86@gmail.com", label: "Email" },
                 ].map((social, index) => (
                   <motion.a
