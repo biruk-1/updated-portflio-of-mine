@@ -59,6 +59,24 @@ export const Footer = () => {
                   <social.icon className="h-5 w-5 group-hover:scale-110 transition-transform" />
                 </motion.a>
               ))}
+              {/* Download CV button */}
+              <motion.a
+                href="/professional%20resume%20for%20a%20job.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.03 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 }}
+                className="ml-2"
+                aria-label="Download CV"
+              >
+                <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-emerald-500 text-white font-semibold hover:bg-emerald-600 hover:scale-105 hover:shadow-2xl transition-all transform">
+                  <span>Download CV</span>
+                </button>
+              </motion.a>
             </div>
 
             {/* Divider */}

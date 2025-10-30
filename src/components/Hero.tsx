@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Smartphone, Code2 } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Smartphone, Code2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CodeAnimation } from "./CodeAnimation";
 import profileImage from "@/assets/profile.png";
@@ -139,6 +139,21 @@ export const Hero = () => {
                   onClick={() => scrollToSection("contact")}
                 >
                   Get In Touch
+                </Button>
+                <Button
+                  size="lg"
+                  className="font-semibold group bg-gradient-to-r from-emerald-500 to-emerald-600 hover:scale-105 hover:shadow-2xl transform transition-all"
+                  asChild
+                >
+                  <a
+                    href="/professional%20resume%20for%20a%20job.pdf"
+                    download
+                    aria-label="Download CV"
+                    className="inline-flex items-center gap-2 text-white px-4 py-2 rounded-md"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download CV
+                  </a>
                 </Button>
               </motion.div>
 
