@@ -8,61 +8,57 @@ export const Skills = () => {
     {
       category: "Mobile Development",
       icon: Smartphone,
-      gradient: "from-primary to-secondary",
       skills: [
-        { name: "React Native", level: 95 },
-        { name: "Expo", level: 93 },
-        { name: "Redux", level: 90 },
-        { name: "RevenueCat", level: 88 },
-        { name: "WebSockets", level: 87 },
-        { name: "In-App Purchases", level: 90 },
-        { name: "Firebase", level: 88 },
-        { name: "Offline-First Apps", level: 85 },
+        "React Native",
+        "Expo",
+        "Redux",
+        "RevenueCat",
+        "WebSockets",
+        "In-App Purchases",
+        "Firebase",
+        "Offline-First Apps",
       ],
     },
     {
       category: "Frontend",
       icon: Globe,
-      gradient: "from-secondary to-accent",
       skills: [
-        { name: "React", level: 95 },
-        { name: "Next.js", level: 90 },
-        { name: "JavaScript", level: 96 },
-        { name: "HTML/CSS", level: 94 },
-        { name: "Redux", level: 90 },
-        { name: "GraphQL", level: 85 },
-        { name: "Responsive Design", level: 93 },
-        { name: "PWA", level: 87 },
+        "React",
+        "Next.js",
+        "JavaScript",
+        "HTML/CSS",
+        "Redux",
+        "GraphQL",
+        "Responsive Design",
+        "PWA",
       ],
     },
     {
       category: "Backend",
       icon: Database,
-      gradient: "from-accent to-primary",
       skills: [
-        { name: "Node.js", level: 92 },
-        { name: "Express", level: 90 },
-        { name: "Django", level: 85 },
-        { name: "Python", level: 84 },
-        { name: "REST APIs", level: 93 },
-        { name: "MongoDB", level: 90 },
-        { name: "PostgreSQL", level: 88 },
-        { name: "SQLite", level: 86 },
+        "Node.js",
+        "Express",
+        "Django",
+        "Python",
+        "REST APIs",
+        "MongoDB",
+        "PostgreSQL",
+        "SQLite",
       ],
     },
     {
       category: "Tools & DevOps",
       icon: Wrench,
-      gradient: "from-primary via-secondary to-accent",
       skills: [
-        { name: "Git / GitHub", level: 94 },
-        { name: "Docker", level: 82 },
-        { name: "DigitalOcean", level: 85 },
-        { name: "CI/CD Pipelines", level: 87 },
-        { name: "Vercel", level: 88 },
-        { name: "GitHub Actions", level: 83 },
-        { name: "Agile/Scrum", level: 90 },
-        { name: "C++", level: 78 },
+        "Git / GitHub",
+        "Docker",
+        "DigitalOcean",
+        "CI/CD Pipelines",
+        "Vercel",
+        "GitHub Actions",
+        "Agile/Scrum",
+        "C++",
       ],
     },
   ];
@@ -83,15 +79,8 @@ export const Skills = () => {
   };
 
   return (
-    <section id="skills" className="py-20 sm:py-32 relative overflow-hidden bg-muted/30">
-      {/* Background Gradient */}
-      <motion.div
-        className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary/5 to-transparent"
-        animate={{ opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 4, repeat: Infinity }}
-      />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="skills" className="py-20 sm:py-32 relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -111,7 +100,7 @@ export const Skills = () => {
               Skills & <span className="text-gradient">Expertise</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              A comprehensive toolkit for building world-class applications
+              Technologies and tools I work with
             </p>
           </motion.div>
 
@@ -120,86 +109,44 @@ export const Skills = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid md:grid-cols-2 gap-8"
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
           >
             {skillCategories.map((category, categoryIndex) => (
               <motion.div key={categoryIndex} variants={item}>
-                <Card className="p-8 h-full glass-effect border-border hover:border-primary/50 transition-all duration-300 group">
-                  <div className="flex items-center gap-4 mb-6">
-                    <motion.div
-                      whileHover={{ rotate: 360, scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${category.gradient} flex items-center justify-center glow-effect`}
-                    >
-                      <category.icon className="h-7 w-7 text-white" />
-                    </motion.div>
-                    <h3 className="text-2xl font-bold group-hover:text-gradient transition-all">
+                <Card className="p-6 h-full border border-border/50 hover:border-border transition-colors bg-card/50 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                      <category.icon className="h-5 w-5 text-foreground/70" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">
                       {category.category}
                     </h3>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="flex flex-wrap gap-2">
                     {category.skills.map((skill, skillIndex) => (
-                      <div key={skillIndex} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">
-                            {skill.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {skill.level}%
-                          </span>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <motion.div
-                            className={`h-full bg-gradient-to-r ${category.gradient} rounded-full`}
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${skill.level}%` }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 1,
-                              delay: skillIndex * 0.1,
-                              ease: "easeOut",
-                            }}
-                          />
-                        </div>
-                      </div>
+                      <motion.div
+                        key={skillIndex}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          delay: skillIndex * 0.03,
+                          duration: 0.2,
+                        }}
+                      >
+                        <Badge
+                          variant="outline"
+                          className="px-3 py-1.5 text-xs font-normal bg-background/50 hover:bg-muted/50 border-border/50 text-foreground/80 cursor-default transition-colors"
+                        >
+                          {skill}
+                        </Badge>
+                      </motion.div>
                     ))}
                   </div>
                 </Card>
               </motion.div>
             ))}
-          </motion.div>
-
-          {/* Tech Stack Badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-16 text-center"
-          >
-            <h3 className="text-2xl font-bold mb-6">Currently Working With</h3>
-            <div className="flex flex-wrap justify-center gap-3">
-              {["React Native", "React", "Node.js", "Express", "Next.js", "MongoDB", "Expo", "Firebase", "Django", "Python"].map(
-                (tech, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    <Badge
-                      variant="secondary"
-                      className="px-4 py-2 text-base font-medium bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 hover:border-primary/50 cursor-default"
-                    >
-                      {tech}
-                    </Badge>
-                  </motion.div>
-                )
-              )}
-            </div>
           </motion.div>
         </div>
       </div>
