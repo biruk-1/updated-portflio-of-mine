@@ -1,185 +1,150 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Home,
   User,
-  Code2,
   Briefcase,
+  Layers,
+  FolderKanban,
   Mail,
   Moon,
   Sun,
-  Smartphone,
   Menu,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
   theme: "light" | "dark";
   toggleTheme: () => void;
 }
 
+const LG_BREAKPOINT = 1024;
+
+const navItems = [
+  { id: "home", label: "Home", icon: Home },
+  { id: "about", label: "About", icon: User },
+  { id: "experience", label: "Experience", icon: Briefcase },
+  { id: "skills", label: "Skills", icon: Layers },
+  { id: "projects", label: "Projects", icon: FolderKanban },
+  { id: "contact", label: "Contact", icon: Mail },
+];
+
 export const Sidebar = ({ theme, toggleTheme }: SidebarProps) => {
   const [activeSection, setActiveSection] = useState("home");
   const [isOpen, setIsOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(min-width: ${LG_BREAKPOINT}px)`);
+    const onChange = () => {
+      setIsDesktop(mql.matches);
+      if (mql.matches) setIsOpen(false);
+    };
+    onChange();
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "experience", "skills", "projects", "contact"];
+      const sections = navItems.map((n) => n.id);
       const current = sections.find((section) => {
         const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 200 && rect.bottom >= 200;
-        }
-        return false;
+        if (!element) return false;
+        const rect = element.getBoundingClientRect();
+        return rect.top <= 180 && rect.bottom >= 180;
       });
       if (current) setActiveSection(current);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-      setIsOpen(false);
-    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setIsOpen(false);
   };
 
-  const navItems = [
-    { id: "home", label: "Home", icon: Home },
-    { id: "about", label: "About", icon: User },
-    { id: "experience", label: "Experience", icon: Briefcase },
-    { id: "skills", label: "Skills", icon: Code2 },
-    { id: "projects", label: "Projects", icon: Briefcase },
-    { id: "contact", label: "Contact", icon: Mail },
-  ];
+  const showSidebar = isDesktop || isOpen;
 
   return (
     <>
-      {/* Mobile Toggle Button */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-6 left-6 z-[60] w-12 h-12 rounded-full glass-effect flex items-center justify-center glow-effect"
-        aria-label="Toggle menu"
+      <button
+        onClick={() => setIsOpen((v) => !v)}
+        className="lg:hidden fixed top-4 right-4 z-[60] h-10 w-10 rounded-md border border-border bg-background flex items-center justify-center"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isOpen}
       >
-        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-      </motion.button>
+        {isOpen ? <X className="h-4 w-4" strokeWidth={1.75} /> : <Menu className="h-4 w-4" strokeWidth={1.75} />}
+      </button>
 
-      {/* Sidebar */}
       <AnimatePresence>
-        {(isOpen || window.innerWidth >= 1024) && (
+        {showSidebar && (
           <motion.aside
-            initial={{ x: -300 }}
+            initial={reduceMotion || isDesktop ? false : { x: -240 }}
             animate={{ x: 0 }}
-            exit={{ x: -300 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed left-0 top-0 h-screen w-20 lg:w-24 bg-card border-r border-border z-50 flex flex-col items-center py-8 glass-effect"
+            exit={reduceMotion ? undefined : { x: -240 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="fixed left-0 top-0 z-50 flex h-screen w-[4.5rem] flex-col items-center border-r border-border bg-background py-5"
           >
-            {/* Logo */}
-            <motion.button
+            <button
               onClick={() => scrollToSection("home")}
-              className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center text-2xl font-bold text-white mb-12 glow-effect hover:scale-110 transition-transform"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6 }}
+              className="mb-8 text-sm font-semibold tracking-tight text-foreground"
+              aria-label="Go to home"
             >
-              B
-            </motion.button>
+              BC
+            </button>
 
-            {/* Navigation */}
-            <nav className="flex-1 flex flex-col items-center gap-6">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative w-12 h-12 rounded-xl flex items-center justify-center transition-all group ${
-                    activeSection === item.id
-                      ? "bg-primary text-primary-foreground glow-effect scale-110"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={item.label}
-                >
-                  <item.icon className="h-5 w-5" />
-
-                  {/* Tooltip */}
-                  <motion.span
-                    className="absolute left-full ml-4 px-3 py-1.5 rounded-lg bg-card border border-border text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileHover={{ opacity: 1, x: 0 }}
+            <nav className="flex flex-1 flex-col items-center gap-1">
+              {navItems.map((item) => {
+                const active = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    title={item.label}
+                    aria-label={item.label}
+                    aria-current={active ? "page" : undefined}
+                    className={`relative flex h-10 w-10 items-center justify-center rounded-md transition-colors ${
+                      active
+                        ? "text-foreground bg-muted"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                    }`}
                   >
-                    {item.label}
-                  </motion.span>
-
-                  {/* Active Indicator */}
-                  {activeSection === item.id && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute left-0 w-1 h-8 bg-primary rounded-r-full"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </motion.button>
-              ))}
+                    {active && (
+                      <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-primary" />
+                    )}
+                    <item.icon className="h-4 w-4" strokeWidth={1.75} />
+                  </button>
+                );
+              })}
             </nav>
 
-            {/* Theme Toggle */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+            <button
+              onClick={toggleTheme}
+              className="flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+              aria-label="Toggle theme"
             >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="w-12 h-12 rounded-xl hover:bg-muted"
-                aria-label="Toggle theme"
-              >
-                <motion.div
-                  initial={{ rotate: 0 }}
-                  animate={{ rotate: theme === "dark" ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {theme === "dark" ? (
-                    <Sun className="h-5 w-5" />
-                  ) : (
-                    <Moon className="h-5 w-5" />
-                  )}
-                </motion.div>
-              </Button>
-            </motion.div>
-
-            {/* Mobile Badge */}
-            <motion.div
-              className="mt-4 w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-primary flex items-center justify-center glow-effect-secondary"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Smartphone className="h-5 w-5 text-white" />
-            </motion.div>
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" strokeWidth={1.75} />
+              ) : (
+                <Moon className="h-4 w-4" strokeWidth={1.75} />
+              )}
+            </button>
           </motion.aside>
         )}
       </AnimatePresence>
 
-      {/* Mobile Overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && !isDesktop && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+            className="lg:hidden fixed inset-0 z-40 bg-background/70"
           />
         )}
       </AnimatePresence>

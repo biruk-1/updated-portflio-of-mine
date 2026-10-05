@@ -1,403 +1,291 @@
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { ExternalLink, Github, Smartphone, Globe } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { ArrowUpRight, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
-// Project images (from src/assets)
-import cosmicAIImage from "@/assets/cosmicai.png";
-import coachAIImage from "@/assets/coachai.png";
-import hotelImage from "@/assets/hotel.png";
-import fitnessImage from "@/assets/fitness.png";
-import ticketsImage from "@/assets/ticket.png";
-import conveneImage from "@/assets/convene.png";
-import consultImage from "@/assets/conseltuncy.png";
-import castingImage from "@/assets/casting.png";
-import adminDashboard from "@/assets/adminDashboard.png";
-import alRajaaImage from "@/assets/al-rajaa.png";
-import defaultImage from "@/assets/image.png";
+import hotelImage from "@/assets/hotel.webp";
+import ticketsImage from "@/assets/ticket.webp";
+import conveneImage from "@/assets/convene.webp";
+import consultImage from "@/assets/conseltuncy.webp";
+import castingImage from "@/assets/casting.webp";
+import alRajaaImage from "@/assets/al-rajaa.webp";
+import fitnessImage from "@/assets/fitness.webp";
+import adminDashboard from "@/assets/adminDashboard.webp";
+
+type Project = {
+  title: string;
+  summary: string;
+  outcome?: string;
+  tech: string[];
+  github: string;
+  live: string | null;
+  image: string;
+  type: "Mobile" | "Web";
+  featured?: boolean;
+};
 
 export const Projects = () => {
-  // Use the user's provided projects data (images imported above)
-  const projectsData = [
+  const reduceMotion = useReducedMotion();
+  const [showAll, setShowAll] = useState(false);
+
+  const projects: Project[] = [
     {
-      title: "CosmicAI",
-      description:
-        "Full-stack astrology and psychic consultation app with real-time AI chatbot integration and location-based recommendations.",
-      technologies:
-        "React Native, Express.js, Supabase, RevenueCat, Expo, Expo Push Notifications",
-      githubLink: "https://github.com/biruk-1/psysc-pro",
-      demoLink: "https://cosmicai.vercel.app/",
-      image: cosmicAIImage,
-      featured: true,
-    },
-    {
-      title: "Coach AI",
-      description:
-        "Health and fitness mobile application connecting users with coaches nearby, featuring AI-guided fitness tips and real-time chat.",
-      technologies: "React Native, Express.js, DigitalOcean, RevenueCat, Expo",
-      githubLink: "https://github.com/biruk-1/coaching-app",
-      demoLink: "https://coachai.vercel.app/",
-      image: coachAIImage,
-      featured: true,
-    },
-    {
-      title: "Hotel Management System Dashboard",
-      description:
-        "Comprehensive dashboard system with multi-role access for hotel staff like admin, waiter, cashier, and kitchen, including offline support.",
-      technologies: "React, Express.js, SQLite, IndexedDB, cPanel",
-      githubLink: "https://github.com/biruk-1/POS-system",
-      demoLink: "https://hotel-dashboard.vercel.app/",
+      title: "Kiburan Rwanda",
+      summary:
+        "Public web product for Kiburan Trading — TypeScript/React site that presents the company brand and business offering.",
+      outcome: "Live production deploy used as the company website.",
+      tech: ["TypeScript", "React", "Vite"],
+      github: "https://github.com/biruk-1/kiburan-ruwanda-v3",
+      live: "https://kiburan-ruwanda-v3.vercel.app",
       image: hotelImage,
+      type: "Web",
       featured: true,
     },
     {
-      title: "Fitness Tracker App",
-      description:
-        "A React Native app offering BMI calculations, workout plans, and dietary recommendations.",
-      technologies: "React Native, Redux, Django, MongoDB",
-      githubLink: "https://github.com/biruk-1/fitness",
-      demoLink: "#",
-      image: fitnessImage,
+      title: "Live Betting & Football Platform",
+      summary:
+        "Full-stack real-time betting and live football web app with JWT auth, WebSockets, and concurrent session handling.",
+      outcome: "Designed for 500+ concurrent users under live match load.",
+      tech: ["TypeScript", "React", "Node.js", "MongoDB", "WebSockets"],
+      github: "https://github.com/biruk-1/up-work-betting-website",
+      live: null,
+      image: adminDashboard,
+      type: "Web",
+      featured: true,
+    },
+    {
+      title: "Study Abroad Dashboard",
+      summary:
+        "Full-stack dashboard for counselors managing study-abroad applications and status workflows.",
+      outcome: "Typed Next.js + Node pipeline for operations teams.",
+      tech: ["Next.js", "Node.js", "TypeScript"],
+      github: "https://github.com/biruk-1/study-abroad-dashboard",
+      live: null,
+      image: consultImage,
+      type: "Web",
+      featured: true,
+    },
+    {
+      title: "WebSmart Landing",
+      summary:
+        "Marketing site for WebSmart Technology Solutions with a public Vercel deployment.",
+      tech: ["React", "JavaScript", "Vite"],
+      github: "https://github.com/biruk-1/web-smart",
+      live: "https://web-smart-sooty.vercel.app",
+      image: castingImage,
+      type: "Web",
     },
     {
       title: "Ticket App for Event Organizers",
-      description:
-        "A mobile app enabling event organizers to sell tickets, manage events, and track attendees.",
-      technologies: "React Native, Firebase",
-      githubLink: "https://github.com/biruk-1/my-ticket-app/tree/master",
-      demoLink: "#",
+      summary:
+        "React Native app for selling tickets, managing events, and tracking attendees.",
+      tech: ["React Native", "Firebase"],
+      github: "https://github.com/biruk-1/my-ticket-app",
+      live: null,
       image: ticketsImage,
+      type: "Mobile",
     },
     {
-      title: "Convene App",
-      description:
-        "An app for scheduling meetings and task management with real-time notifications.",
-      technologies: "React Native, Node.js, MongoDB",
-      githubLink: "https://github.com/biruk-1/Convene/tree/master",
-      demoLink: "#",
+      title: "Convene",
+      summary:
+        "Event organizing app for scheduling meetings and tasks with notifications.",
+      tech: ["React Native", "Node.js", "MongoDB"],
+      github: "https://github.com/biruk-1/Convene",
+      live: null,
       image: conveneImage,
+      type: "Mobile",
     },
     {
-      title: "Competent Scholars Website",
-      description:
-        "A platform for students to find colleges and apply directly, with backend integration for analytics.",
-      technologies: "React, Django, MySQL",
-      githubLink: "https://github.com/biruk-1/conceltancyProject",
-      demoLink: "#",
-      image: consultImage,
+      title: "Fetan Task Management",
+      summary: "Task management product for organizing team work in TypeScript.",
+      tech: ["TypeScript", "React"],
+      github: "https://github.com/biruk-1/Fetan-Task-mangment",
+      live: null,
+      image: fitnessImage,
+      type: "Web",
     },
     {
-      title: "Casting Website",
-      description: "A comprehensive platform that connects models and casting agencies.",
-      technologies: "React, JSON",
-      githubLink: "https://github.com/biruk-1/casting",
-      demoLink: "https://casting-alpha.vercel.app/",
-      image: castingImage,
-    },
-    {
-      title: "Casting Admin Dashboard",
-      description: "The admin dashboard for managing subscriptions and analytics.",
-      technologies: "React, JSON",
-      githubLink: "https://github.com/biruk-1/castingAdmin",
-      demoLink: "https://castingAdmin-alpha.vercel.app/",
-      image: adminDashboard,
-    },
-    {
-      title: "Al-rajaa Recruitment Agency Website",
-      description:
-        "Website built for Al-rajaa Recruitment Agency with admin features.",
-      technologies: "React, Firebase, ExpressJS",
-      githubLink: "https://github.com/biruk-1/Al-rajaa-Workers",
-      demoLink: "https://al-rajaa-workers.vercel.app/",
+      title: "Upwork Feedback App",
+      summary: "Client feedback collection app delivered for an Upwork engagement.",
+      tech: ["JavaScript", "React"],
+      github: "https://github.com/biruk-1/markhenry-feedback-app",
+      live: null,
       image: alRajaaImage,
+      type: "Web",
+    },
+    {
+      title: "Al-rajaa Recruitment Agency",
+      summary: "Recruitment agency website with admin features and a public demo.",
+      tech: ["React", "Firebase", "Express"],
+      github: "https://github.com/biruk-1/Al-rajaa-Workers",
+      live: "https://al-rajaa-workers.vercel.app/",
+      image: alRajaaImage,
+      type: "Web",
+    },
+    {
+      title: "SoloOpsAI",
+      summary: "TypeScript exploration of AI-assisted operations tooling.",
+      tech: ["TypeScript"],
+      github: "https://github.com/biruk-1/SoloOpsAI",
+      live: null,
+      image: consultImage,
+      type: "Web",
     },
   ];
 
-  // Normalize data to the shape used by the existing renderer
-  const projects = projectsData.map((p) => ({
-    title: p.title,
-    description: p.description,
-    tech: p.technologies ? p.technologies.split(",").map((t) => t.trim()) : [],
-    github: p.githubLink,
-    live: p.demoLink,
-    image: p.image || defaultImage,
-    type: p.technologies && p.technologies.toLowerCase().includes("react native") ? "mobile" : "web",
-  }));
-
-  // Show-more state: show only first two rows initially (responsive)
-  const [showAll, setShowAll] = useState(false);
-  const [initialCount, setInitialCount] = useState(6);
-
-  useEffect(() => {
-    const compute = () => {
-      const w = window.innerWidth;
-      if (w >= 1024) setInitialCount(6); // lg: 3 cols * 2 rows
-      else if (w >= 768) setInitialCount(4); // md: 2 cols * 2 rows
-      else setInitialCount(2); // sm: 1 col * 2 rows
-    };
-    compute();
-    window.addEventListener("resize", compute);
-    return () => window.removeEventListener("resize", compute);
-  }, []);
-
-  const visibleProjects = showAll ? projects : projects.slice(0, initialCount);
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, scale: 0.9 },
-    show: { opacity: 1, scale: 1 },
-  };
+  const featured = projects.filter((p) => p.featured);
+  const rest = projects.filter((p) => !p.featured);
+  const visibleRest = showAll ? rest : rest.slice(0, 3);
 
   return (
-    <section id="projects" className="py-20 sm:py-32 relative overflow-hidden">
-      {/* Animated Background */}
-      <motion.div
-        className="absolute top-1/4 left-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"
-        animate={{
-          scale: [1, 1.3, 1],
-          y: [0, 50, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-        }}
-      />
+    <section id="projects" className="section-pad border-t border-border">
+      <div className="site-container">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.35 }}
+        >
+          <p className="section-label">04 — Projects</p>
+          <h2 className="section-title">Selected work</h2>
+          <p className="section-lede">
+            Products and client work from my public GitHub — demos where a live
+            deploy exists.
+          </p>
+        </motion.div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <motion.div
-              className="inline-block mb-4"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        <div className="mt-12 space-y-10">
+          {featured.map((project, index) => (
+            <motion.article
+              key={project.title}
+              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.35, delay: index * 0.04 }}
+              className="surface overflow-hidden"
             >
-              <span className="text-6xl">💼</span>
-            </motion.div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
-              Featured <span className="text-gradient">Projects</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Showcasing mobile and web applications built with passion
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {visibleProjects.map((project) => (
-              <motion.div key={project.title} variants={item}>
-                <Card className="overflow-hidden glass-effect border-border hover:border-primary/50 transition-all duration-300 group h-full flex flex-col">
-                  {/* Project Header - use real image as background */}
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-
-                    {/* Dim layer for contrast */}
-                    <div className="absolute inset-0 bg-black/30" />
-
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.4 }}
-                        className="p-2 rounded-full bg-black/30"
-                      >
-                        {project.type === "mobile" ? (
-                          <Smartphone className="h-14 w-14 text-white drop-shadow-lg" />
-                        ) : (
-                          <Globe className="h-14 w-14 text-white drop-shadow-lg" />
-                        )}
-                      </motion.div>
-                    </div>
-
-                    {/* Type Badge */}
-                    <div className="absolute top-4 right-4">
-                      <Badge
-                        variant="secondary"
-                        className="bg-white/90 backdrop-blur-sm text-foreground font-semibold"
-                      >
-                        {project.type === "mobile" ? "📱 Mobile" : "🌐 Web"}
-                      </Badge>
-                    </div>
-
-                    {/* Animated Overlay */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-t from-card to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
-                      initial={false}
-                    />
+              <div className="grid md:grid-cols-2">
+                <div className="aspect-[16/10] bg-muted md:aspect-auto md:min-h-[280px]">
+                  <img
+                    src={project.image}
+                    alt={`${project.title} preview`}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex flex-col justify-center p-6 sm:p-8">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <span>{project.type}</span>
+                    <span aria-hidden>·</span>
+                    <span>Featured</span>
                   </div>
-
-                  {/* Project Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <motion.h3
-                      className="text-xl font-bold mb-3 group-hover:text-gradient transition-all"
-                      whileHover={{ x: 5 }}
+                  <h3 className="mt-3 text-xl font-semibold tracking-tight">{project.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {project.summary}
+                  </p>
+                  {project.outcome && (
+                    <p className="mt-3 text-sm text-foreground/85">{project.outcome}</p>
+                  )}
+                  <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
+                    {project.tech.join(" · ")}
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-4 text-sm">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {project.title}
-                    </motion.h3>
-
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tech.map((tech, techIndex) => (
-                        <motion.div
-                          key={techIndex}
-                          initial={{ opacity: 0, scale: 0 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: techIndex * 0.05 }}
-                        >
-                          <Badge
-                            variant="outline"
-                            className="text-xs border-primary/30 hover:border-primary hover:bg-primary/10 transition-colors"
-                          >
-                            {tech}
-                          </Badge>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 group/btn"
-                        asChild
+                      <Github className="h-4 w-4" strokeWidth={1.75} />
+                      Code
+                    </a>
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        <motion.a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Github className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
-                          Code
-                        </motion.a>
-                      </Button>
-                      <Button size="sm" className="flex-1 group/btn" asChild>
-                        <motion.a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <ExternalLink className="h-4 w-4 mr-2 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-                          Demo
-                        </motion.a>
-                      </Button>
-                    </div>
+                        Live demo
+                        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                      </a>
+                    )}
                   </div>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
 
-          {/* View More / Show Less + GitHub Link */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <div className="flex items-center gap-3">
-              <Button
-                size="lg"
-                className="font-semibold"
-                onClick={() => setShowAll((s) => !s)}
-              >
-                {showAll ? "Show Less" : "Show More"}
-              </Button>
-              <div className="text-sm text-muted-foreground">Showing {Math.min(showAll ? projects.length : initialCount, projects.length)} of {projects.length}</div>
-            </div>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="font-semibold border-2 hover:border-primary hover:text-primary"
-              asChild
+        <div className="mt-12 border-t border-border">
+          {visibleRest.map((project, index) => (
+            <motion.article
+              key={project.title}
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.3, delay: index * 0.03 }}
+              className="grid gap-4 border-b border-border py-6 sm:grid-cols-[7.5rem_1fr_auto] sm:items-start sm:gap-6"
             >
-              <motion.a
-                href="https://github.com/biruk-1"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Github className="mr-2 h-5 w-5" />
-                View All Projects on GitHub
-              </motion.a>
+              <div className="hidden overflow-hidden rounded-sm border border-border sm:block sm:h-16 sm:w-[7.5rem]">
+                <img
+                  src={project.image}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <h3 className="text-base font-semibold">{project.title}</h3>
+                  <span className="text-xs text-muted-foreground">{project.type}</span>
+                </div>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                  {project.summary}
+                </p>
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                  {project.tech.join(" · ")}
+                </p>
+              </div>
+              <div className="flex gap-4 text-sm sm:pt-1">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Code
+                </a>
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Demo
+                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                  </a>
+                )}
+              </div>
+            </motion.article>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          {rest.length > 3 && (
+            <Button variant="outline" onClick={() => setShowAll((s) => !s)}>
+              {showAll ? "Show fewer projects" : `Show ${rest.length - 3} more`}
             </Button>
-          </motion.div>
+          )}
+          <Button variant="ghost" asChild>
+            <a href="https://github.com/biruk-1" target="_blank" rel="noopener noreferrer">
+              <Github className="h-4 w-4" strokeWidth={1.75} />
+              All repositories
+            </a>
+          </Button>
         </div>
       </div>
     </section>
   );
 };
-
-function ShowMoreControls({ projects }: { projects: any[] }) {
-  const [showAll, setShowAll] = useState(false);
-  const [initialCount, setInitialCount] = useState(6);
-
-  useEffect(() => {
-    const compute = () => {
-      const w = window.innerWidth;
-      if (w >= 1024) setInitialCount(6); // lg: 3 cols * 2 rows
-      else if (w >= 768) setInitialCount(4); // md: 2 cols * 2 rows
-      else setInitialCount(2); // sm: 1 col * 2 rows
-    };
-    compute();
-    window.addEventListener("resize", compute);
-    return () => window.removeEventListener("resize", compute);
-  }, []);
-
-  const visible = showAll ? projects.length : initialCount;
-
-  // Render the toggle button which will control visible items via a custom event
-  // We'll communicate visibility by updating a data attribute on the grid container so CSS/JS can respond.
-  // Simpler: dispatch a custom event with visible count
-  useEffect(() => {
-    const evt = new CustomEvent("projects:visible", { detail: { visible } });
-    window.dispatchEvent(evt);
-  }, [visible]);
-
-  return (
-    <div className="flex items-center gap-3">
-      <Button
-        size="lg"
-        className="font-semibold"
-        onClick={() => setShowAll((s) => !s)}
-      >
-        {showAll ? "Show Less" : "Show More"}
-      </Button>
-      <div className="text-sm text-muted-foreground">Showing {Math.min(visible, projects.length)} of {projects.length}</div>
-    </div>
-  );
-}
-

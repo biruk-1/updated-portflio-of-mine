@@ -7,25 +7,15 @@ import { Skills } from "@/components/Skills";
 import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { LoadingScreen } from "@/components/LoadingScreen";
 
 const Index = () => {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
-    
+    const initialTheme = savedTheme ?? "dark";
     setTheme(initialTheme);
     document.documentElement.classList.toggle("dark", initialTheme === "dark");
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const toggleTheme = () => {
@@ -35,24 +25,20 @@ const Index = () => {
     document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Sidebar theme={theme} toggleTheme={toggleTheme} />
-      
-      <main className="lg:ml-24">
-  <Hero />
-  <About />
-  <Experience />
-  <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      
-      <Footer />
+      <div className="lg:ml-[4.5rem]">
+        <main>
+          <Hero />
+          <About />
+          <Experience />
+          <Skills />
+          <Projects />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };
