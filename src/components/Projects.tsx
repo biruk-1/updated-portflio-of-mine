@@ -1,289 +1,253 @@
+import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
-import { ArrowUpRight, Github } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { featuredProjects, secondaryProjects, type Project } from "@/data/projects";
 
-import hotelImage from "@/assets/hotel.webp";
-import ticketsImage from "@/assets/ticket.webp";
-import conveneImage from "@/assets/convene.webp";
-import consultImage from "@/assets/conseltuncy.webp";
-import castingImage from "@/assets/casting.webp";
-import alRajaaImage from "@/assets/al-rajaa.webp";
-import fitnessImage from "@/assets/fitness.webp";
-import adminDashboard from "@/assets/adminDashboard.webp";
-
-type Project = {
-  title: string;
-  summary: string;
-  outcome?: string;
-  tech: string[];
-  github: string;
-  live: string | null;
-  image: string;
-  type: "Mobile" | "Web";
-  featured?: boolean;
-};
+const ProjectLinks = ({
+  project,
+  emphasizeStudy = false,
+}: {
+  project: Project;
+  emphasizeStudy?: boolean;
+}) => (
+  <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm">
+    {project.caseStudy !== false && (
+      <Link
+        to={`/projects/${project.slug}`}
+        className={
+          emphasizeStudy
+            ? "inline-flex items-center gap-1.5 text-primary transition-opacity hover:opacity-80"
+            : "link-quiet inline-flex items-center gap-1.5"
+        }
+      >
+        View case study
+        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+      </Link>
+    )}
+    {project.live && (
+      <a
+        href={project.live}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="link-quiet inline-flex items-center gap-1.5"
+      >
+        Live demo
+        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+      </a>
+    )}
+    {project.github && (
+      <a
+        href={project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="link-quiet inline-flex items-center gap-1.5"
+      >
+        GitHub
+        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+      </a>
+    )}
+  </div>
+);
 
 export const Projects = () => {
   const reduceMotion = useReducedMotion();
   const [showAll, setShowAll] = useState(false);
 
-  const projects: Project[] = [
-    {
-      title: "Kiburan Rwanda",
-      summary:
-        "Public web product for Kiburan Trading — TypeScript/React site that presents the company brand and business offering.",
-      outcome: "Live production deploy used as the company website.",
-      tech: ["TypeScript", "React", "Vite"],
-      github: "https://github.com/biruk-1/kiburan-ruwanda-v3",
-      live: "https://kiburan-ruwanda-v3.vercel.app",
-      image: hotelImage,
-      type: "Web",
-      featured: true,
-    },
-    {
-      title: "Live Betting & Football Platform",
-      summary:
-        "Full-stack real-time betting and live football web app with JWT auth, WebSockets, and concurrent session handling.",
-      outcome: "Designed for 500+ concurrent users under live match load.",
-      tech: ["TypeScript", "React", "Node.js", "MongoDB", "WebSockets"],
-      github: "https://github.com/biruk-1/up-work-betting-website",
-      live: null,
-      image: adminDashboard,
-      type: "Web",
-      featured: true,
-    },
-    {
-      title: "Study Abroad Dashboard",
-      summary:
-        "Full-stack dashboard for counselors managing study-abroad applications and status workflows.",
-      outcome: "Typed Next.js + Node pipeline for operations teams.",
-      tech: ["Next.js", "Node.js", "TypeScript"],
-      github: "https://github.com/biruk-1/study-abroad-dashboard",
-      live: null,
-      image: consultImage,
-      type: "Web",
-      featured: true,
-    },
-    {
-      title: "WebSmart Landing",
-      summary:
-        "Marketing site for WebSmart Technology Solutions with a public Vercel deployment.",
-      tech: ["React", "JavaScript", "Vite"],
-      github: "https://github.com/biruk-1/web-smart",
-      live: "https://web-smart-sooty.vercel.app",
-      image: castingImage,
-      type: "Web",
-    },
-    {
-      title: "Ticket App for Event Organizers",
-      summary:
-        "React Native app for selling tickets, managing events, and tracking attendees.",
-      tech: ["React Native", "Firebase"],
-      github: "https://github.com/biruk-1/my-ticket-app",
-      live: null,
-      image: ticketsImage,
-      type: "Mobile",
-    },
-    {
-      title: "Convene",
-      summary:
-        "Event organizing app for scheduling meetings and tasks with notifications.",
-      tech: ["React Native", "Node.js", "MongoDB"],
-      github: "https://github.com/biruk-1/Convene",
-      live: null,
-      image: conveneImage,
-      type: "Mobile",
-    },
-    {
-      title: "Fetan Task Management",
-      summary: "Task management product for organizing team work in TypeScript.",
-      tech: ["TypeScript", "React"],
-      github: "https://github.com/biruk-1/Fetan-Task-mangment",
-      live: null,
-      image: fitnessImage,
-      type: "Web",
-    },
-    {
-      title: "Upwork Feedback App",
-      summary: "Client feedback collection app delivered for an Upwork engagement.",
-      tech: ["JavaScript", "React"],
-      github: "https://github.com/biruk-1/markhenry-feedback-app",
-      live: null,
-      image: alRajaaImage,
-      type: "Web",
-    },
-    {
-      title: "Al-rajaa Recruitment Agency",
-      summary: "Recruitment agency website with admin features and a public demo.",
-      tech: ["React", "Firebase", "Express"],
-      github: "https://github.com/biruk-1/Al-rajaa-Workers",
-      live: "https://al-rajaa-workers.vercel.app/",
-      image: alRajaaImage,
-      type: "Web",
-    },
-    {
-      title: "SoloOpsAI",
-      summary: "TypeScript exploration of AI-assisted operations tooling.",
-      tech: ["TypeScript"],
-      github: "https://github.com/biruk-1/SoloOpsAI",
-      live: null,
-      image: consultImage,
-      type: "Web",
-    },
-  ];
-
-  const featured = projects.filter((p) => p.featured);
-  const rest = projects.filter((p) => !p.featured);
+  const featured = featuredProjects();
+  const rest = secondaryProjects();
   const visibleRest = showAll ? rest : rest.slice(0, 3);
 
   return (
     <section id="projects" className="section-pad border-t border-border">
       <div className="site-container">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.35 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="section-label">04 — Projects</p>
-          <h2 className="section-title">Selected work</h2>
-          <p className="section-lede">
-            Products and client work from my public GitHub — demos where a live
-            deploy exists.
-          </p>
+          <p className="section-label">04 / work</p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <h2 className="section-title max-w-lg">Selected products</h2>
+            <p className="max-w-md text-sm leading-6 text-muted-foreground md:text-right">
+              Featured work opens into case studies — role, decisions, and outcomes.
+            </p>
+          </div>
         </motion.div>
 
-        <div className="mt-12 space-y-10">
-          {featured.map((project, index) => (
-            <motion.article
-              key={project.title}
-              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.35, delay: index * 0.04 }}
-              className="surface overflow-hidden"
-            >
-              <div className="grid md:grid-cols-2">
-                <div className="aspect-[16/10] bg-muted md:aspect-auto md:min-h-[280px]">
-                  <img
-                    src={project.image}
-                    alt={`${project.title} preview`}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
+        <div className="mt-14 space-y-16 xl:space-y-20">
+          {featured.map((project, index) => {
+            const reverse = index % 2 === 1;
+            return (
+              <motion.article
+                key={project.slug}
+                initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.4, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+                className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14"
+              >
+                <div className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}>
+                  <Link
+                    to={`/projects/${project.slug}`}
+                    className="surface group block overflow-hidden transition-transform duration-500 ease-craft hover:-translate-y-0.5 focus-ring"
+                    aria-label={`Open case study: ${project.title}`}
+                  >
+                    <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+                      <span className="h-2 w-2 rounded-full bg-[#ff5f57]" aria-hidden />
+                      <span className="h-2 w-2 rounded-full bg-[#febc2e]" aria-hidden />
+                      <span className="h-2 w-2 rounded-full bg-[#28c840]" aria-hidden />
+                      <span className="meta ml-2 truncate">
+                        {project.live?.replace(/^https?:\/\//, "") ?? `${project.slug}.local`}
+                      </span>
+                    </div>
+                    <div
+                      className={`relative overflow-hidden bg-muted ${
+                        project.type === "Mobile" ? "aspect-[4/5] sm:aspect-[16/11]" : "aspect-[16/10]"
+                      }`}
+                    >
+                      <img
+                        src={project.image}
+                        alt={`${project.title} preview`}
+                        className={`h-full w-full transition-transform duration-700 ease-craft group-hover:scale-[1.02] ${
+                          project.type === "Mobile" ? "object-contain" : "object-cover"
+                        }`}
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-background/90 to-transparent px-4 py-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                        <span className="text-sm font-medium">View case study</span>
+                        <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-                <div className="flex flex-col justify-center p-6 sm:p-8">
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <span>{project.type}</span>
-                    <span aria-hidden>·</span>
-                    <span>Featured</span>
+
+                <div className={`lg:col-span-5 ${reverse ? "lg:order-1" : ""}`}>
+                  <div className="flex items-center gap-3">
+                    <span className="font-display text-3xl text-muted-foreground/50">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="meta">
+                      {project.type} · {project.year}
+                    </span>
                   </div>
-                  <h3 className="mt-3 text-xl font-semibold tracking-tight">{project.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  <h3 className="mt-4 font-display text-3xl tracking-[-0.02em] xl:text-4xl">
+                    <Link
+                      to={`/projects/${project.slug}`}
+                      className="rounded transition-colors hover:text-primary focus-ring"
+                    >
+                      {project.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
                     {project.summary}
                   </p>
-                  {project.outcome && (
-                    <p className="mt-3 text-sm text-foreground/85">{project.outcome}</p>
+                  {project.role && (
+                    <p className="mt-4 text-sm leading-7 text-foreground/85">
+                      <span className="meta mr-2">role</span>
+                      {project.role}
+                    </p>
                   )}
-                  <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-                    {project.tech.join(" · ")}
+                  {project.outcome && (
+                    <p className="mt-4 border-l-2 border-primary/60 pl-3 text-sm text-foreground/90">
+                      {project.outcome}
+                    </p>
+                  )}
+                  <p className="meta mt-5">{project.tech.join(" · ")}</p>
+                  <ProjectLinks project={project} emphasizeStudy />
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        <div className="mt-20">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <h3 className="font-display text-2xl tracking-tight">More work</h3>
+            <p className="meta hidden sm:block">{rest.length} projects</p>
+          </div>
+
+          <div className="overflow-hidden rounded border border-border">
+            {visibleRest.map((project, index) => (
+              <motion.article
+                key={project.slug}
+                initial={reduceMotion ? false : { opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.03 }}
+                className="grid gap-3 border-b border-border bg-card p-4 last:border-b-0 transition-colors hover:bg-muted/40 sm:grid-cols-[4.5rem_1.35fr_1fr_auto] sm:items-center sm:gap-6 sm:px-5 sm:py-4"
+              >
+                <span className="meta">{project.year}</span>
+                <div>
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    {project.caseStudy !== false ? (
+                      <Link
+                        to={`/projects/${project.slug}`}
+                        className="rounded text-sm font-semibold tracking-tight transition-colors hover:text-primary focus-ring"
+                      >
+                        {project.title}
+                      </Link>
+                    ) : (
+                      <h4 className="text-sm font-semibold tracking-tight">{project.title}</h4>
+                    )}
+                    <span className="meta">{project.type}</span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                    {project.summary}
                   </p>
-                  <div className="mt-6 flex flex-wrap gap-4 text-sm">
+                </div>
+                <p className="meta hidden sm:block">{project.tech.slice(0, 3).join(" · ")}</p>
+                <div className="flex flex-wrap gap-4 text-sm">
+                  {project.caseStudy !== false && (
+                    <Link to={`/projects/${project.slug}`} className="link-quiet">
+                      Case study
+                    </Link>
+                  )}
+                  {project.github && (
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                      className="link-quiet"
                     >
-                      <Github className="h-4 w-4" strokeWidth={1.75} />
-                      Code
+                      GitHub
                     </a>
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        Live demo
-                        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
-                      </a>
-                    )}
-                  </div>
+                  )}
+                  {project.live && (
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-quiet inline-flex items-center gap-1"
+                    >
+                      Live
+                      <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    </a>
+                  )}
                 </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+              </motion.article>
+            ))}
+          </div>
 
-        <div className="mt-12 border-t border-border">
-          {visibleRest.map((project, index) => (
-            <motion.article
-              key={project.title}
-              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.3, delay: index * 0.03 }}
-              className="grid gap-4 border-b border-border py-6 sm:grid-cols-[7.5rem_1fr_auto] sm:items-start sm:gap-6"
-            >
-              <div className="hidden overflow-hidden rounded-sm border border-border sm:block sm:h-16 sm:w-[7.5rem]">
-                <img
-                  src={project.image}
-                  alt=""
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div>
-                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <h3 className="text-base font-semibold">{project.title}</h3>
-                  <span className="text-xs text-muted-foreground">{project.type}</span>
-                </div>
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  {project.summary}
-                </p>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                  {project.tech.join(" · ")}
-                </p>
-              </div>
-              <div className="flex gap-4 text-sm sm:pt-1">
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Code
-                </a>
-                {project.live && (
-                  <a
-                    href={project.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Demo
-                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.75} />
-                  </a>
-                )}
-              </div>
-            </motion.article>
-          ))}
-        </div>
-
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          {rest.length > 3 && (
-            <Button variant="outline" onClick={() => setShowAll((s) => !s)}>
-              {showAll ? "Show fewer projects" : `Show ${rest.length - 3} more`}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {rest.length > 3 && (
+              <Button variant="outline" onClick={() => setShowAll((s) => !s)}>
+                {showAll ? "Collapse list" : `Show ${rest.length - 3} more`}
+              </Button>
+            )}
+            <Button variant="ghost" asChild>
+              <a href="https://github.com/biruk-1" target="_blank" rel="noopener noreferrer">
+                All repositories
+                <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
+              </a>
             </Button>
-          )}
-          <Button variant="ghost" asChild>
-            <a href="https://github.com/biruk-1" target="_blank" rel="noopener noreferrer">
-              <Github className="h-4 w-4" strokeWidth={1.75} />
-              All repositories
-            </a>
-          </Button>
+          </div>
+
+          <p className="meta mt-8 border-t border-border pt-6">
+            room reserved · more products shipping soon
+          </p>
         </div>
       </div>
     </section>

@@ -10,15 +10,15 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-5">
-      <div className="max-w-md text-center space-y-4">
-        <p className="text-sm text-muted-foreground">404</p>
-        <h1 className="text-2xl font-semibold tracking-tight">Page not found</h1>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          The page you’re looking for doesn’t exist or has been moved.
+    <div className="site-shell flex min-h-screen items-center justify-center">
+      <div className="site-container max-w-md text-center">
+        <p className="meta">error · 404</p>
+        <h1 className="mt-4 font-display text-4xl tracking-tight">Page not found</h1>
+        <p className="mt-4 text-sm leading-6 text-muted-foreground">
+          The route you requested doesn’t exist.
         </p>
-        <Button asChild className="mt-2">
-          <a href="/">Back home</a>
+        <Button asChild className="mt-8">
+          <a href="/">Return home</a>
         </Button>
       </div>
     </div>

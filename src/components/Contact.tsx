@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Send } from "lucide-react";
+import { ArrowUpRight, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,11 +10,7 @@ import emailjs from "@emailjs/browser";
 export const Contact = () => {
   const { toast } = useToast();
   const reduceMotion = useReducedMotion();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,17 +33,16 @@ export const Contact = () => {
         },
         publicKey
       );
-
       toast({
         title: "Message sent",
-        description: "Thanks for reaching out. I'll get back to you soon.",
+        description: "Thanks — I'll reply soon.",
       });
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("EmailJS error:", error);
       toast({
-        title: "Failed to send message",
-        description: "Please try again later or email me directly.",
+        title: "Failed to send",
+        description: "Try again later or email me directly.",
         variant: "destructive",
       });
     } finally {
@@ -59,114 +54,101 @@ export const Contact = () => {
     <section id="contact" className="section-pad border-t border-border">
       <div className="site-container">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.35 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16"
         >
-          <p className="section-label">05 — Contact</p>
-          <h2 className="section-title">Let's talk</h2>
-          <p className="section-lede">
-            Open to full-time roles and selective freelance projects. Include
-            context, timeline, and how to reach you.
-          </p>
-        </motion.div>
+          <div>
+            <p className="section-label">05 / contact</p>
+            <h2 className="section-title max-w-sm">
+              Start a conversation
+            </h2>
+            <p className="section-lede">
+              Open to full-time roles and selective freelance. Send context,
+              timeline, and how to reach you.
+            </p>
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <motion.dl
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.35 }}
-            className="space-y-6"
-          >
-            <div>
-              <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                Email
-              </dt>
-              <dd className="mt-2">
+            <div className="mt-10 space-y-5 border-t border-border pt-8">
+              <div>
+                <p className="meta">email</p>
                 <a
                   href="mailto:birukchali86@gmail.com"
-                  className="text-sm font-medium text-foreground hover:underline underline-offset-4"
+                  className="mt-2 inline-flex items-center gap-1 text-base font-medium hover:text-primary transition-colors"
                 >
                   birukchali86@gmail.com
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} />
                 </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                Phone
-              </dt>
-              <dd className="mt-2">
+              </div>
+              <div>
+                <p className="meta">phone</p>
                 <a
                   href="tel:+251940675703"
-                  className="text-sm font-medium text-foreground hover:underline underline-offset-4"
+                  className="mt-2 inline-block text-base font-medium hover:text-primary transition-colors"
                 >
                   +251-940-675-703
                 </a>
-              </dd>
+              </div>
+              <div>
+                <p className="meta">location</p>
+                <p className="mt-2 text-base font-medium">Addis Ababa, Ethiopia · UTC+3</p>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <span className="signal-dot" />
+                <span className="meta">status: accepting opportunities</span>
+              </div>
             </div>
-            <div>
-              <dt className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                Location
-              </dt>
-              <dd className="mt-2 text-sm font-medium text-foreground">
-                Adama, Ethiopia · UTC+3
-              </dd>
-            </div>
-          </motion.dl>
+          </div>
 
-          <motion.form
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.35, delay: 0.04 }}
-            onSubmit={handleSubmit}
-            className="surface space-y-5 p-5 sm:p-7"
-          >
+          <form onSubmit={handleSubmit} className="surface p-5 sm:p-7 space-y-5">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <span className="meta">new_message</span>
+              <span className="meta">required *</span>
+            </div>
+
             <div>
-              <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                Name
+              <label htmlFor="name" className="meta mb-2 block">
+                name *
               </label>
               <Input
                 id="name"
-                type="text"
-                placeholder="Jane Doe"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
+                placeholder="Jane Doe"
                 className="bg-background"
               />
             </div>
             <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                Email
+              <label htmlFor="email" className="meta mb-2 block">
+                email *
               </label>
               <Input
                 id="email"
                 type="email"
-                placeholder="jane@company.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                placeholder="jane@company.com"
                 className="bg-background"
               />
             </div>
             <div>
-              <label htmlFor="message" className="mb-2 block text-sm font-medium">
-                Message
+              <label htmlFor="message" className="meta mb-2 block">
+                message *
               </label>
               <Textarea
                 id="message"
-                placeholder="Role, project context, timeline..."
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 required
                 rows={6}
-                className="bg-background resize-none"
+                placeholder="Role, project context, timeline..."
+                className="resize-none bg-background"
               />
             </div>
-            <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting ? (
                 "Sending..."
               ) : (
@@ -176,8 +158,8 @@ export const Contact = () => {
                 </>
               )}
             </Button>
-          </motion.form>
-        </div>
+          </form>
+        </motion.div>
       </div>
     </section>
   );

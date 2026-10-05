@@ -10,16 +10,16 @@ export default {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1536px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ["Manrope", "system-ui", "sans-serif"],
-        display: ["Manrope", "system-ui", "sans-serif"],
+        sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
+        display: ["Instrument Serif", "Georgia", "serif"],
         mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
-        poppins: ["Manrope", "system-ui", "sans-serif"],
-        inter: ["Manrope", "system-ui", "sans-serif"],
+        poppins: ["IBM Plex Sans", "system-ui", "sans-serif"],
+        inter: ["IBM Plex Sans", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -58,8 +58,12 @@ export default {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 1px)",
+        sm: "calc(var(--radius) - 2px)",
+      },
+      spacing: {
+        18: "4.5rem",
+        22: "5.5rem",
       },
       keyframes: {
         "accordion-down": {
@@ -70,10 +74,18 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "caret-blink": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "caret-blink": "caret-blink 1.1s step-end infinite",
+      },
+      transitionTimingFunction: {
+        craft: "cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },
